@@ -2,7 +2,7 @@
 set -e
 
 # DriftHalt Agent Installer
-# Usage: curl -fsSL https://drifthalt.sh/install | bash -s -- --api-key YOUR_KEY
+# Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
 AGENT_VERSION="1.0.0"
 AGENT_USER="drifthalt"
@@ -25,7 +25,7 @@ done
 
 if [ -z "$API_KEY" ]; then
   echo "Error: --api-key is required"
-  echo "Usage: curl -fsSL https://drifthalt.sh/install | bash -s -- --api-key YOUR_KEY"
+  echo "Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY"
   exit 1
 fi
 
