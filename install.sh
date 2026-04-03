@@ -42,12 +42,15 @@ if ! id "$AGENT_USER" &>/dev/null; then
   useradd --system --no-create-home --shell /usr/sbin/nologin "$AGENT_USER"
 fi
 
+echo "$AGENT_USER ALL=(ALL) NOPASSWD: /usr/bin/crontab -l -u *" > /etc/sudoers.d/drifthalt-agent
+chmod 440 /etc/sudoers.d/drifthalt-agent
+
 # Download and install
 mkdir -p "$INSTALL_DIR"
 curl -fsSL "$REPO_URL" | tar -xz -C "$INSTALL_DIR" --strip-components=1
 
 # Install Python dependencies
-pip3 install -q -r "$INSTALL_DIR/requirements.txt"
+pip3 install -q --break-system-packages -r "$INSTALL_DIR/requirements.txt"
 
 # Create config
 mkdir -p "$CONFIG_DIR"
@@ -61,7 +64,7 @@ cat > "$CONFIG_DIR/agent.conf" << EOF
 EOF
 
 chmod 640 "$CONFIG_DIR/agent.conf"
-chown root:$AGENT_USER "$CONFIG_DIR/agent.conf"
+chown $AGENT_USER:$AGENT_USER "$CONFIG_DIR/agent.conf"
 
 # Create systemd service
 cat > "$SERVICE_FILE" << EOF

@@ -23,7 +23,7 @@ def _find_domains():
 
     try:
         result = subprocess.run(
-            ["grep", "-r", "server_name", "/etc/nginx/sites-enabled/"],
+            ["grep", "-R", "server_name", "/etc/nginx/sites-enabled/"],
             capture_output=True,
             text=True,
             timeout=10,

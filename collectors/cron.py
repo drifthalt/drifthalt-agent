@@ -41,7 +41,7 @@ def _get_user_crontab(user):
     jobs = []
     try:
         result = subprocess.run(
-            ["crontab", "-l", "-u", user],
+            ["sudo","crontab", "-l", "-u", user],
             capture_output=True,
             text=True,
             timeout=10,
