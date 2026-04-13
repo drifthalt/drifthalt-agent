@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.0.1"
+AGENT_VERSION="1.0.2"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 CONFIG_DIR="/etc/drifthalt"
@@ -89,7 +89,7 @@ EOF
 # Enable and start
 systemctl daemon-reload
 systemctl enable drifthalt-agent
-systemctl start drifthalt-agent
+systemctl restart drifthalt-agent
 
 echo ""
 echo "DriftHalt Agent installed and running."
