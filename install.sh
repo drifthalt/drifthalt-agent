@@ -4,9 +4,10 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.0.6"
+AGENT_VERSION="1.1.0"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
+VENV_DIR="/opt/drifthalt-agent/venv"
 CONFIG_DIR="/etc/drifthalt"
 SERVICE_FILE="/etc/systemd/system/drifthalt-agent.service"
 REPO_URL="https://github.com/drifthalt/drifthalt-agent/archive/refs/tags/v${AGENT_VERSION}.tar.gz"
@@ -14,7 +15,6 @@ REPO_URL="https://github.com/drifthalt/drifthalt-agent/archive/refs/tags/v${AGEN
 # Parse arguments
 API_KEY=""
 API_URL="https://drifthalt.com"
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     --api-key) API_KEY="$2"; shift 2 ;;
@@ -34,17 +34,13 @@ echo "Installing DriftHalt Agent v${AGENT_VERSION}..."
 # Check for Python 3
 if ! command -v python3 &>/dev/null; then
   echo "Installing Python 3..."
-  apt-get update -qq && apt-get install -y -qq python3 python3-pip
+  apt-get update -qq && apt-get install -y -qq python3
 fi
 
-# Check for pip3
-if ! command -v pip3 &>/dev/null; then
-  echo "Installing pip3..."
-  while sudo fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend /var/cache/apt/archives/lock 2>/dev/null; do
-    echo "Waiting for apt lock..."
-    sleep 3
-  done
-  apt-get update -qq && apt-get install -y -qq python3-pip
+# Check for python3-venv
+if ! python3 -m venv --help &>/dev/null; then
+  echo "Installing python3-venv..."
+  apt-get update -qq && apt-get install -y -qq python3-venv
 fi
 
 # Create agent user
@@ -59,15 +55,13 @@ chmod 440 /etc/sudoers.d/drifthalt-agent
 mkdir -p "$INSTALL_DIR"
 curl -fsSL "$REPO_URL" | tar -xz -C "$INSTALL_DIR" --strip-components=1
 
-# Install Python dependencies
-if pip3 install -q --break-system-packages -r "$INSTALL_DIR/requirements.txt" 2>/dev/null; then
-  echo "Dependencies installed with --break-system-packages"
-elif pip3 install -q -r "$INSTALL_DIR/requirements.txt" 2>/dev/null; then
-  echo "Dependencies installed"
-else
-  echo "Installing dependencies via apt..."
-  apt-get install -y -qq python3-requests
-fi
+# Create virtual environment
+echo "Creating virtual environment..."
+python3 -m venv "$VENV_DIR"
+
+# Install Python dependencies into venv
+echo "Installing dependencies..."
+"$VENV_DIR/bin/pip" install -q -r "$INSTALL_DIR/requirements.txt"
 
 # Create config
 mkdir -p "$CONFIG_DIR"
@@ -79,7 +73,6 @@ cat > "$CONFIG_DIR/agent.conf" << EOF
   "auto_update": true
 }
 EOF
-
 chmod 640 "$CONFIG_DIR/agent.conf"
 chown $AGENT_USER:$AGENT_USER "$CONFIG_DIR/agent.conf"
 
@@ -93,7 +86,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=${AGENT_USER}
-ExecStart=/usr/bin/python3 ${INSTALL_DIR}/agent.py
+ExecStart=${VENV_DIR}/bin/python ${INSTALL_DIR}/agent.py
 Restart=always
 RestartSec=30
 StandardOutput=journal
