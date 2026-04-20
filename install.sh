@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.0.2"
+AGENT_VERSION="1.0.3"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 CONFIG_DIR="/etc/drifthalt"
@@ -35,6 +35,12 @@ echo "Installing DriftHalt Agent v${AGENT_VERSION}..."
 if ! command -v python3 &>/dev/null; then
   echo "Installing Python 3..."
   apt-get update -qq && apt-get install -y -qq python3 python3-pip
+fi
+
+# Check for pip3
+if ! command -v pip3 &>/dev/null; then
+  echo "Installing pip3..."
+  apt-get update -qq && apt-get install -y -qq python3-pip
 fi
 
 # Create agent user
