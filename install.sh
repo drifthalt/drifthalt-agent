@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.0.4"
+AGENT_VERSION="1.0.5"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 CONFIG_DIR="/etc/drifthalt"
@@ -56,7 +56,15 @@ mkdir -p "$INSTALL_DIR"
 curl -fsSL "$REPO_URL" | tar -xz -C "$INSTALL_DIR" --strip-components=1
 
 # Install Python dependencies
-pip3 install -q -r "$INSTALL_DIR/requirements.txt" || pip3 install -q --break-system-packages -r "$INSTALL_DIR/requirements.txt"
+# Install Python dependencies
+if pip3 install -q --break-system-packages -r "$INSTALL_DIR/requirements.txt" 2>/dev/null; then
+  echo "Dependencies installed with --break-system-packages"
+elif pip3 install -q -r "$INSTALL_DIR/requirements.txt" 2>/dev/null; then
+  echo "Dependencies installed"
+else
+  echo "Installing dependencies via apt..."
+  apt-get install -y -qq python3-requests
+fi
 
 # Create config
 mkdir -p "$CONFIG_DIR"
