@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.1.5"
+AGENT_VERSION="1.1.6"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 VENV_DIR="/opt/drifthalt-agent/venv"
@@ -41,10 +41,10 @@ fi
 echo "Installing python3-venv..."
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 apt-get update -qq 2>/dev/null
-apt-get install -y -qq python3-venv python3${PYTHON_VERSION}-venv 2>/dev/null || true
+apt-get install -y -qq python3-venv 2>/dev/null || true
 
 # Wait for apt lock to release
-sleep 3
+sleep 5
 
 # Create agent user
 if ! id "$AGENT_USER" &>/dev/null; then

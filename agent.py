@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-AGENT_VERSION = "1.1.5"
+AGENT_VERSION = "1.1.6"
 
 
 def collect_all():
