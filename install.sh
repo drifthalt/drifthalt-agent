@@ -42,6 +42,7 @@ echo "Installing python3-venv..."
 PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 apt-get update -qq 2>/dev/null
 apt-get install -y -qq python3-venv 2>/dev/null || true
+apt-get install -y -qq python3${PYTHON_VERSION}-venv 2>/dev/null || true
 
 # Wait for apt lock to release
 sleep 5
