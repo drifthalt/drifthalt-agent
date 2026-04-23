@@ -159,6 +159,6 @@ The DriftHalt dashboard, API, and version intelligence engine are proprietary. T
 
 ## About
 
-Built by [Eber Hampton](https://github.com/eberhampton) — a career changer learning development through building real things. DriftHalt is operated by ELH Bridge LLC.
+DriftHalt is operated by ELH Bridge LLC.
 
 [drifthalt.com](https://drifthalt.com) · [feedback@drifthalt.com](mailto:feedback@drifthalt.com)
