@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.1.6"
+AGENT_VERSION="1.1.7"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 VENV_DIR="/opt/drifthalt-agent/venv"
@@ -45,11 +45,17 @@ apt-get install -y -qq python3-venv 2>/dev/null || true
 apt-get install -y -qq python3${PYTHON_VERSION}-venv 2>/dev/null || true
 
 # Wait for apt lock to release
-sleep 5
+sleep 3
 
 # Create agent user
 if ! id "$AGENT_USER" &>/dev/null; then
   useradd --system --no-create-home --shell /usr/sbin/nologin "$AGENT_USER"
+fi
+
+# Add to docker group if Docker is installed
+if getent group docker &>/dev/null; then
+  usermod -aG docker "$AGENT_USER"
+  echo "Docker detected — added $AGENT_USER to docker group"
 fi
 
 echo "$AGENT_USER ALL=(ALL) NOPASSWD: /usr/bin/crontab -l -u *" > /etc/sudoers.d/drifthalt-agent
