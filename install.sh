@@ -63,7 +63,24 @@ chmod 440 /etc/sudoers.d/drifthalt-agent
 
 # Download and install
 mkdir -p "$INSTALL_DIR"
-curl -fsSL "$REPO_URL" | tar -xz -C "$INSTALL_DIR" --strip-components=1
+# Download and verify checksum
+TARBALL="/tmp/drifthalt-agent-v${AGENT_VERSION}.tar.gz"
+EXPECTED_CHECKSUM="534b53c967a11a718e23da3bcc70d2565bb6d3d3e0682e925b70baafa5cf19b1"
+
+curl -fsSL "$REPO_URL" -o "$TARBALL"
+
+ACTUAL_CHECKSUM=$(sha256sum "$TARBALL" | cut -d' ' -f1)
+if [ "$ACTUAL_CHECKSUM" != "$EXPECTED_CHECKSUM" ]; then
+  echo "Error: Checksum verification failed. The downloaded file may be corrupted or tampered with."
+  echo "Expected: $EXPECTED_CHECKSUM"
+  echo "Got:      $ACTUAL_CHECKSUM"
+  rm -f "$TARBALL"
+  exit 1
+fi
+
+echo "Checksum verified."
+tar -xz -C "$INSTALL_DIR" --strip-components=1 -f "$TARBALL"
+rm -f "$TARBALL"
 
 # Create virtual environment
 echo "Creating virtual environment..."
@@ -84,8 +101,7 @@ cat > "$CONFIG_DIR/agent.conf" << EOF
 {
   "api_key": "${API_KEY}",
   "api_url": "${API_URL}",
-  "scan_interval": 900,
-  "auto_update": true
+  "scan_interval": 900
 }
 EOF
 chmod 640 "$CONFIG_DIR/agent.conf"
