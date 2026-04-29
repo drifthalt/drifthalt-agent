@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.1.7"
+AGENT_VERSION="1.1.8"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 VENV_DIR="/opt/drifthalt-agent/venv"
@@ -91,8 +91,8 @@ if [ ! -f "$VENV_DIR/bin/pip" ]; then
   curl -fsSL https://bootstrap.pypa.io/get-pip.py | "$VENV_DIR/bin/python3"
 fi
 
-# Install Python dependencies into venv
 echo "Installing dependencies..."
+"$VENV_DIR/bin/pip" install -q --upgrade pip
 "$VENV_DIR/bin/pip" install -q -r "$INSTALL_DIR/requirements.txt"
 
 # Create config
