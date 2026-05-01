@@ -116,14 +116,14 @@ sudo systemctl restart drifthalt-agent
 
 Once your server is reporting data you can see:
 
-Overview — resource gauges, package count, service status summary
-Packages — every installed package and version, with latest version comparison for 90+ tracked packages
-Services — all systemd services with status filtering
-SSL — certificate expiry countdown with color-coded urgency
-Cron — all scheduled jobs across crontab and cron.d, expandable to see full commands
-Containers — Docker containers with image, tag, status, and ports
-History — up to 50 past scans with a diff engine to compare any two; set a baseline and track deviations
-Changelog — document why changes were made, with auto-fill from detected drift
+- Overview — resource gauges, package count, service status summary
+- Packages — every installed package and version, with latest version comparison for 90+ tracked packages
+- Services — all systemd services with status filtering
+- SSL — certificate expiry countdown with color-coded urgency
+- Cron — all scheduled jobs across crontab and cron.d, expandable to see full commands
+- Containers — Docker containers with image, tag, status, and ports
+- History — up to 50 past scans with a diff engine to compare any two; set a baseline and track deviations
+- Changelog — document why changes were made, with auto-fill from detected drift
 ---
 
 ## Alerts
