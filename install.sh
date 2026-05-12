@@ -65,7 +65,7 @@ chmod 440 /etc/sudoers.d/drifthalt-agent
 mkdir -p "$INSTALL_DIR"
 # Download and verify checksum
 TARBALL="/tmp/drifthalt-agent-v${AGENT_VERSION}.tar.gz"
-EXPECTED_CHECKSUM="f0f18490973d052381ec958f14247990ffa39e9e720895d858244bed52a2f8ae"
+EXPECTED_CHECKSUM="8dd6815b1559d870f1e10681e11f8ecdb17d221e59d23d3cd55dbeb8d40100ec"
 rm -f "$TARBALL"
 curl -fsSL "$REPO_URL" -o "$TARBALL"
 
