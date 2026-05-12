@@ -98,8 +98,7 @@ The agent config lives at `/etc/drifthalt/agent.conf`:
 {
   "api_key": "your_api_key",
   "api_url": "https://drifthalt.com",
-  "scan_interval": 900,
-  "auto_update": true
+  "scan_interval": 900
 }
 ```
 
@@ -117,13 +116,14 @@ sudo systemctl restart drifthalt-agent
 
 Once your server is reporting data you can see:
 
-- **Overview** — resource gauges, package count, service status summary
-- **Packages** — every installed package and version, searchable
-- **Services** — all systemd services with status filtering
-- **SSL** — certificate expiry countdown with color-coded urgency
-- **Cron** — all scheduled jobs across crontab and cron.d
-- **History** — up to 50 past scans with a diff engine to compare any two
-
+- Overview — resource gauges, package count, service status summary
+- Packages — every installed package and version, with latest version comparison for 90+ tracked packages
+- Services — all systemd services with status filtering
+- SSL — certificate expiry countdown with color-coded urgency
+- Cron — all scheduled jobs across crontab and cron.d, expandable to see full commands
+- Containers — Docker containers with image, tag, status, and ports
+- History — up to 50 past scans with a diff engine to compare any two; set a baseline and track deviations
+- Changelog — document why changes were made, with auto-fill from detected drift
 ---
 
 ## Alerts
@@ -131,7 +131,7 @@ Once your server is reporting data you can see:
 DriftHalt sends alerts via email, Slack, Discord, and generic webhooks for:
 
 - Server offline or not responding
-- SSL certificate expiring within 14 days
+- SSL certificate expiring within 30 days
 - Configuration drift detected between scans
 
 Configure notification channels in your dashboard under Alerts.
