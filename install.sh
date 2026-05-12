@@ -4,7 +4,7 @@ set -e
 # DriftHalt Agent Installer
 # Usage: curl -fsSL https://drifthalt.sh/install | sudo bash -s -- --api-key YOUR_KEY
 
-AGENT_VERSION="1.1.8"
+AGENT_VERSION="1.1.9"
 AGENT_USER="drifthalt"
 INSTALL_DIR="/opt/drifthalt-agent"
 VENV_DIR="/opt/drifthalt-agent/venv"
@@ -45,7 +45,7 @@ apt-get install -y -qq python3-venv 2>/dev/null || true
 apt-get install -y -qq python3${PYTHON_VERSION}-venv 2>/dev/null || true
 
 # Wait for apt lock to release
-sleep 3
+sleep 2
 
 # Create agent user
 if ! id "$AGENT_USER" &>/dev/null; then
@@ -66,7 +66,7 @@ mkdir -p "$INSTALL_DIR"
 # Download and verify checksum
 TARBALL="/tmp/drifthalt-agent-v${AGENT_VERSION}.tar.gz"
 EXPECTED_CHECKSUM="f0f18490973d052381ec958f14247990ffa39e9e720895d858244bed52a2f8ae"
-
+rm -f "$TARBALL"
 curl -fsSL "$REPO_URL" -o "$TARBALL"
 
 ACTUAL_CHECKSUM=$(sha256sum "$TARBALL" | cut -d' ' -f1)
