@@ -1,11 +1,11 @@
 import psutil
 
-
 def collect():
     """Collect CPU, memory, and disk usage."""
     cpu_percent = psutil.cpu_percent(interval=1)
 
     memory = psutil.virtual_memory()
+    swap = psutil.swap_memory()
 
     disk_data = []
     for partition in psutil.disk_partitions():
@@ -28,5 +28,8 @@ def collect():
         "memory_total_mb": round(memory.total / (1024 ** 2)),
         "memory_used_mb": round(memory.used / (1024 ** 2)),
         "memory_percent": memory.percent,
+        "swap_total_mb": round(swap.total / (1024 ** 2)),
+        "swap_used_mb": round(swap.used / (1024 ** 2)),
+        "swap_percent": swap.percent,
         "disk": disk_data,
     }
