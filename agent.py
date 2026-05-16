@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 
 from config import load_config, save_config
 from sender import register_server, send_scan
-from collectors import system, resources, packages, services, docker, ssl, cron, ports, users, oom, pm2
+from collectors import system, resources, packages, services, docker, ssl, cron, ports, users, oom, pm2, cron_exec
 
 # Configure logging
 logging.basicConfig(
@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-AGENT_VERSION = "1.2.4"
+AGENT_VERSION = "1.2.5"
 
 
 def collect_all():
@@ -46,6 +46,7 @@ def collect_all():
         "users": users.collect(),
         "oom_events": oom.collect(),
         "pm2_processes": pm2.collect(),
+        "cron_executions": cron_exec.collect(),
     }
 
     logger.info(
