@@ -22,6 +22,7 @@ def collect():
                 'restart_count': proc.get('pm2_env', {}).get('restart_time', 0),
                 'memory_mb': round(proc.get('monit', {}).get('memory', 0) / (1024 ** 2), 1),
                 'pm_id': proc.get('pm_id'),
+                'pm_uptime': proc.get('pm2_env', {}).get('pm_uptime'),
             })
 
     except (subprocess.TimeoutExpired, json.JSONDecodeError, FileNotFoundError):
